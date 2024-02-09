@@ -1,5 +1,5 @@
-import { User } from "./User";
+import { User } from './User';
 
-export interface Volunteer extends User{
-    birthDate: Date;
+export interface Volunteer extends User {
+  birth: Date;
 }

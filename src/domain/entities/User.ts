@@ -1,8 +1,10 @@
+import { Address } from "cluster";
+
 export interface User {
-  id?: string;
+  id: string;
   name: string;
   email: string;
   password: string;
-  address: JSON;
-  phone: string;
+  address: Address;
+  createdAt: Date;
 }
