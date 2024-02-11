@@ -1,44 +1,56 @@
 import { Volunteer } from "src/domain/entities/Volunteer";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
 import { IVolunteerService } from "src/domain/ports/ivolunteer_service";
+import * as mongoose from 'mongoose';
+
+export const VolunteerSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    address: { type: String, required: true },
+    createdAt: { type: Date, required: true, default: Date.now },
+    birth: { type: Date, required: true }
+});
 
 @Injectable()
 export class VolunteerService implements IVolunteerService {
-    volunteers: Volunteer[] = [];
 
-    create(newVolunteer: Volunteer): Promise<Volunteer> {
-        const createdVolunteer = { ...newVolunteer };
-        this.volunteers.push(createdVolunteer);
-        return Promise.resolve(createdVolunteer);
+    constructor(@InjectModel('Volunteer') private readonly volunteerModel: Model<Volunteer>) {}
+
+    async create(newVolunteer: Volunteer): Promise<Volunteer> {
+        const createdVolunteer = new this.volunteerModel(newVolunteer);
+        const result = await createdVolunteer.save();
+        return result;
     }
 
-    update(id: string, volunteerToUpdate: Volunteer): Promise<Volunteer> {
-        const volunteerIndex = this.volunteers.findIndex(volunteer => volunteer.id === id);
-        if (volunteerIndex !== -1) {
-            this.volunteers[volunteerIndex] = { ...volunteerToUpdate };
-            return Promise.resolve(this.volunteers[volunteerIndex]);
+    async update(id: string, volunteerToUpdate: Volunteer): Promise<Volunteer> {
+        const updatedVolunteer = await this.volunteerModel.findByIdAndUpdate(id, volunteerToUpdate, { new: true });
+        if (!updatedVolunteer) {
+            throw new NotFoundException('Volunteer not found');
         }
-        return Promise.reject(new Error("Volunteer not found"));
+        return updatedVolunteer;
     }
 
-    deleteById(id: string): Promise<Volunteer> {
-        const volunteerIndex = this.volunteers.findIndex(volunteer => volunteer.id === id);
-        if (volunteerIndex !== -1) {
-            const deletedVolunteer = this.volunteers.splice(volunteerIndex, 1)[0];
-            return Promise.resolve(deletedVolunteer);
+    async deleteById(id: string): Promise<Volunteer> {
+        const deletedVolunteer = await this.volunteerModel.findByIdAndDelete(id);
+        if (!deletedVolunteer) {
+            throw new NotFoundException('Volunteer not found');
         }
-        return Promise.reject(new Error("Volunteer not found"));
+        return deletedVolunteer;
     }
 
-    findById(id: string): Promise<Volunteer> {
-        const foundVolunteer = this.volunteers.find(volunteer => volunteer.id === id);
-        if (foundVolunteer) {
-            return Promise.resolve(foundVolunteer);
+    async findById(id: string): Promise<Volunteer> {
+        const foundVolunteer = await this.volunteerModel.findById(id);
+        if (!foundVolunteer) {
+            throw new NotFoundException('Volunteer not found');
         }
-        return Promise.reject(new Error("Volunteer not found"));
+        return foundVolunteer;
     }
 
-    fetchAll(): Promise<Volunteer[]> {
-        return Promise.resolve(this.volunteers);
+    async fetchAll(): Promise<Volunteer[]> {
+        const volunteers = await this.volunteerModel.find().exec();
+        return volunteers;
     }
 }

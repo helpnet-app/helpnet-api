@@ -4,9 +4,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CompanyModule } from './api/routes/company/company.module';
 import { VolunteerModule } from './api/routes/volunteer/volunteer.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [CompanyModule, VolunteerModule],
+  imports: [ConfigModule.forRoot(), CompanyModule, VolunteerModule, MongooseModule.forRoot(process.env.DB_URL)],
   controllers: [AppController, ProgramController],
   providers: [AppService],
 })

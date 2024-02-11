@@ -7,27 +7,32 @@ export class VolunteerController {
     constructor(private volunteerService: VolunteerService) {}
 
     @Post()
-    create(@Body() newVolunteer: Volunteer): Promise<Volunteer> {
-        return this.volunteerService.create(newVolunteer);
+    async create(@Body() newVolunteer: Volunteer): Promise<Volunteer> {
+        const createdVolunteer = await this.volunteerService.create(newVolunteer);
+        return createdVolunteer;
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() volunteerToUpdate: Volunteer): Promise<Volunteer> {
-        return this.volunteerService.update(id, volunteerToUpdate);
+    async update(@Param('id') id: string, @Body() volunteerToUpdate: Volunteer): Promise<Volunteer> {
+        const updatedVolunteer = await this.volunteerService.update(id, volunteerToUpdate);
+        return updatedVolunteer;
     }
 
     @Delete(':id')
-    deleteById(@Param('id') id: string): Promise<Volunteer> {
-        return this.volunteerService.deleteById(id);
+    async deleteById(@Param('id') id: string): Promise<Volunteer> {
+        const deletedVolunteer = await this.volunteerService.deleteById(id);
+        return deletedVolunteer;
     }
 
     @Get(':id')
-    findById(@Param('id') id: string): Promise<Volunteer> {
-        return this.volunteerService.findById(id);
+    async findById(@Param('id') id: string): Promise<Volunteer> {
+        const foundVolunteer = await this.volunteerService.findById(id);
+        return foundVolunteer;
     }
 
     @Get()
-    fetchAll(): Promise<Volunteer[]> {
-        return this.volunteerService.fetchAll();
+    async fetchAll(): Promise<Volunteer[]> {
+        const volunteers = await this.volunteerService.fetchAll();
+        return volunteers;
     }
 }

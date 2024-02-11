@@ -1,44 +1,57 @@
 import { Company } from "src/domain/entities/Company";
 import { ICompanyService } from "src/domain/ports/icompany_service";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import * as mongoose from 'mongoose';
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+
+export const CompanySchema = new mongoose.Schema({
+    name: {type: String, required: true},
+    email: {type: String, required: true},
+    password: {type: String, required: true},
+    address: {type: String, required: true},
+    createdAt: {type: Date, required: true},
+    tradeName: {type: String, required: true},
+})
+
 
 @Injectable()
 export class CompanyService implements ICompanyService {
-    companies: Company[] = []
 
-    create(newCompany: Company): Promise<Company> {
-        const createdCompany = { ...newCompany }; // Create a copy of newCompany
-        this.companies.push(createdCompany);
-        return Promise.resolve(createdCompany);
+    constructor(@InjectModel('Company') private readonly companyModel: Model<Company>) {}
+
+    async create(newCompany: Company): Promise<Company> {
+        const createdCompany = new this.companyModel(newCompany);
+        const result = await createdCompany.save();
+        return result;
     }
 
-    update(id: string, companyToUpdate: Company): Promise<Company> {
-        const companyIndex = this.companies.findIndex(company => company.id === id);
-        if (companyIndex !== -1) {
-            this.companies[companyIndex] = { ...companyToUpdate }; // Update company properties
-            return Promise.resolve(this.companies[companyIndex]);
+    async update(id: string, companyToUpdate: Company): Promise<Company> {
+        const updatedCompany = await this.companyModel.findByIdAndUpdate(id, companyToUpdate, { new: true });
+        if (!updatedCompany) {
+            throw new NotFoundException('Company not found');
         }
-        return Promise.reject(new Error("Company not found"));
+        return updatedCompany;
     }
 
-    deleteById(id: string): Promise<Company> {
-        const companyIndex = this.companies.findIndex(company => company.id === id);
-        if (companyIndex !== -1) {
-            const deletedCompany = this.companies.splice(companyIndex, 1)[0];
-            return Promise.resolve(deletedCompany);
+    async deleteById(id: string): Promise<Company> {
+        const deletedCompany = await this.companyModel.findByIdAndDelete(id);
+        if (!deletedCompany) {
+            throw new NotFoundException('Company not found');
         }
-        return Promise.reject(new Error("Company not found"));
+        return deletedCompany;
     }
 
-    findById(id: string): Promise<Company> {
-        const foundCompany = this.companies.find(company => company.id === id);
-        if (foundCompany) {
-            return Promise.resolve(foundCompany);
+    async findById(id: string): Promise<Company> {
+        const foundCompany = await this.companyModel.findById(id);
+        if (!foundCompany) {
+            throw new NotFoundException('Company not found');
         }
-        return Promise.reject(new Error("Company not found"));
+        return foundCompany;
     }
 
-    fetchAll(): Promise<Company[]> {
-        return Promise.resolve(this.companies);
+    async fetchAll(): Promise<Company[]> {
+        const companies = await this.companyModel.find().exec();
+        return companies;
     }
 }

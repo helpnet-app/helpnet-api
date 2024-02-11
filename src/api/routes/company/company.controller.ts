@@ -7,27 +7,32 @@ export class CompanyController {
     constructor(private companyService: CompanyService) {}
 
     @Post()
-    create(@Body() newCompany: Company): Promise<Company> {
-        return this.companyService.create(newCompany);
+    async create(@Body() newCompany: Company): Promise<Company> {
+        const createdCompany = await this.companyService.create(newCompany);
+        return createdCompany;
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() companyToUpdate: Company): Promise<Company> {
-        return this.companyService.update(id, companyToUpdate);
+    async update(@Param('id') id: string, @Body() companyToUpdate: Company): Promise<Company> {
+        const updatedCompany = await this.companyService.update(id, companyToUpdate);
+        return updatedCompany;
     }
 
     @Delete(':id')
-    deleteById(@Param('id') id: string): Promise<Company> {
-        return this.companyService.deleteById(id);
+    async deleteById(@Param('id') id: string): Promise<Company> {
+        const deletedCompany = await this.companyService.deleteById(id);
+        return deletedCompany;
     }
 
     @Get(':id')
-    findById(@Param('id') id: string): Promise<Company> {
-        return this.companyService.findById(id);
+    async findById(@Param('id') id: string): Promise<Company> {
+        const foundCompany = await this.companyService.findById(id);
+        return foundCompany;
     }
 
     @Get()
-    fetchAll(): Promise<Company[]> {
-        return this.companyService.fetchAll();
+    async fetchAll(): Promise<Company[]> {
+        const companies = await this.companyService.fetchAll();
+        return companies;
     }
 }
