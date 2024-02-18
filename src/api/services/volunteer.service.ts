@@ -10,9 +10,9 @@ export const VolunteerSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  address: { type: String, required: true },
+  address: { type: Object, required: true },
   createdAt: { type: Date, required: true, default: Date.now },
-  birth: { type: Date, required: true },
+  birthDate: { type: Date, required: true },
 });
 
 @Injectable()
@@ -58,5 +58,11 @@ export class VolunteerService implements IVolunteerService {
   async fetchAll(): Promise<Volunteer[]> {
     const volunteers = await this.volunteerModel.find().exec();
     return volunteers;
+  }
+
+  async fetchVolunteersByIds(volunteersId: string[]): Promise<Volunteer[]> {
+    return await this.volunteerModel
+      .find({ _id: { $in: volunteersId } })
+      .exec();
   }
 }

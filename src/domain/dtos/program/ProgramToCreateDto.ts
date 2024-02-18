@@ -7,4 +7,5 @@ export interface ProgramToCreateDto {
   description: string;
   type: string;
   nSpots: number;
+  tags: string[];
 }

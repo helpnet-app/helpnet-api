@@ -23,7 +23,9 @@ export const ProgramSchema = new mongoose.Schema({
   description: { type: String, required: true },
   type: { type: String, required: true },
   nSpots: { type: Number, required: true },
+  tags: { type: [{ type: String }], required: true },
   status: { type: Number, enum: ProgramStatusEnum, required: true },
+  createdAt: { type: Date, required: true },
 });
 
 @Injectable()
@@ -45,6 +47,7 @@ export class ProgramService implements IProgramService {
     const program = new this.programModel({
       ...newProgram,
       status: ProgramStatusEnum.CREATED,
+      createdAt: new Date(),
       company: company._id,
     });
 
@@ -52,10 +55,16 @@ export class ProgramService implements IProgramService {
   }
 
   async update(
-    programId: string,
+    id: string,
     updatedFields: ProgramToUpdateDto,
   ): Promise<Program> {
-    return await this.programModel.findByIdAndUpdate(programId, updatedFields, {
+    const foundProgram = await this.findById(id);
+    if (foundProgram.status == ProgramStatusEnum.FINISHED) {
+      throw new Error(
+        'Não é possível editar informações de um programa finalizado',
+      );
+    }
+    return await this.programModel.findByIdAndUpdate(id, updatedFields, {
       new: true,
     });
   }

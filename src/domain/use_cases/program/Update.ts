@@ -6,13 +6,12 @@ export class Update {
   constructor(private readonly service: IProgramService) {}
 
   async execute(id: string, updatedFields: ProgramToUpdateDto) {
-    try {
-      const updatedProgram = await this.service.update(id, updatedFields);
-      return updatedProgram;
-    } catch (error) {
+    const updatedProgram = await this.service.update(id, updatedFields);
+    if (!updatedProgram) {
       throw new ItemNotUpdatedError(
         'Não foi possível atualizar informações do programa.',
       );
     }
+    return updatedProgram;
   }
 }
