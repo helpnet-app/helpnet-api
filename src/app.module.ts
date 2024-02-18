@@ -1,15 +1,29 @@
 import { Module } from '@nestjs/common';
-import { ProgramController } from './api/routes/program/program.controller';
+import { ConfigModule } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { MongooseModule } from '@nestjs/mongoose';
+import { HttpExceptionInterceptor } from './api/decorators/http_exception_interceptor';
+import { CompanyModule } from './api/routes/company/company.module';
+import { ProgramModule } from './api/routes/program/program.module';
+import { VolunteerModule } from './api/routes/volunteer/volunteer.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CompanyModule } from './api/routes/company/company.module';
-import { VolunteerModule } from './api/routes/volunteer/volunteer.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ConfigModule.forRoot(), CompanyModule, VolunteerModule, MongooseModule.forRoot(process.env.DB_URL)],
-  controllers: [AppController, ProgramController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot(),
+    CompanyModule,
+    VolunteerModule,
+    ProgramModule,
+    MongooseModule.forRoot(process.env.DB_URL),
+  ],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpExceptionInterceptor,
+    },
+  ],
 })
 export class AppModule {}

@@ -1,13 +1,13 @@
 // UTILIZAR DTOS
 
-import { ProgramToCreate } from '../dtos/program/programToCreate';
+import { ProgramToCreateDto } from '../dtos/program/ProgramToCreateDto';
 import { Program } from '../entities/Program';
 
 export interface IProgramService {
-  create(newProgram: ProgramToCreate, companyId: string): Promise<Program>;
-  update(programId: number, updatedFields: Partial<Program>): Promise<Program>;
-  deleteById(programId: number): Promise<Program>;
+  create(companyId: string, newProgram: ProgramToCreateDto): Promise<Program>;
+  update(id: string, updatedFields: Partial<Program>): Promise<Program>;
+  findById(id: string): Promise<Program>;
+  deleteById(programId: string): Promise<Program>;
   fetchAll(): Promise<Program[]>;
-  fetchByCompany(companyId: number): Promise<Program[]>;
-  
+  findAllByCompanyId(companyId: string): Promise<Program[]>;
 }

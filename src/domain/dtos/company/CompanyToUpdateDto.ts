@@ -1,6 +1,3 @@
-import { UserToUpdateDto } from "../user/UserToUpdateDto";
-import { Company } from "src/domain/entities/Company";
+import { Company } from 'src/domain/entities/Company';
 
-export interface CompanyToUpdateDto extends UserToUpdateDto {
-    userToUpdate: Company
-}
+export type CompanyToUpdateDto = Partial<Company>;

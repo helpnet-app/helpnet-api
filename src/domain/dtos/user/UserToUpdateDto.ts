@@ -1,6 +1,3 @@
-import { User } from "src/domain/entities/User"
+import { User } from 'src/domain/entities/User';
 
-export interface UserToUpdateDto {
-    id: string,
-    userToUpdate: User
-}
+export type UserToUpdateDto = Partial<User>;

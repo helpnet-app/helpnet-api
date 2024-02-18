@@ -8,9 +8,9 @@ export interface Program {
   title: string;
   mode: ModeEnum;
   duration: number;
-  expiresIn: number;
   description: string;
   type: string;
   nSpots: number;
   status: ProgramStatusEnum;
+  createdAt: Date;
 }
