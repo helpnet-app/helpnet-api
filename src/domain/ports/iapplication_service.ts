@@ -15,4 +15,5 @@ export interface IApplicationService {
   ): Promise<Application>;
   updateManyByProgramId(programId: string, field: string, newValue: any);
   delete(applicationId: string): Promise<Application>;
+  findApplicationByVolunteerId(volunteerId: string): Promise<Application>;
 }

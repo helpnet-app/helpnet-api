@@ -16,6 +16,7 @@ import { Apply } from 'src/domain/use_cases/application/Apply';
 import { Approves } from 'src/domain/use_cases/application/Approves';
 import { FetchAllApplicationsByProgram } from 'src/domain/use_cases/application/FetchAllApplicationsByProgram';
 import { FindAllAppliedPrograms } from 'src/domain/use_cases/application/FindAllAppliedPrograms';
+import { FindApplicationByVolunteerId } from 'src/domain/use_cases/application/FindVolunteerById';
 import { GiveUp } from 'src/domain/use_cases/application/GiveUp';
 import { Reject } from 'src/domain/use_cases/application/Reject';
 import { Create } from 'src/domain/use_cases/program/Create';
@@ -105,16 +106,22 @@ export class ProgramController {
     return await fetchUC.execute(programId);
   }
 
-  @Get(':volunteerId/applied/programs')
+  @Get('/applied/:volunteerId')
   async findAppliedPrograms(@Param('volunteerId') volunteerId: string) {
     const appliedUC = new FindAllAppliedPrograms(this.applicationService);
     return await appliedUC.execute(volunteerId);
   }
 
-  @Delete(':programId/giveup')
-  async giveUp(@Param('programId') programId: string) {
+  @Get('/application/:volunteerId')
+  async findApplicationVolunteer(@Param('volunteerId') volunteerId: string) {
+    const findUC = new FindApplicationByVolunteerId(this.applicationService);
+    return await findUC.execute(volunteerId);
+  }
+
+  @Delete('/application/:applicationId/giveup')
+  async giveUp(@Param('applicationId') applicationId: string) {
     const giveUpUC = new GiveUp(this.applicationService);
-    return await giveUpUC.execute(programId);
+    return await giveUpUC.execute(applicationId);
   }
 
   @Patch('/application/:applicationId/approves')

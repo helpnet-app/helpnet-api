@@ -27,22 +27,23 @@
 
 ## Program
 
-- 🟢 Listar todos os Programas de voluntariado disponíveis
+- 🟢 Listar todos os Programas de voluntariado disponíveis `/programs`
 - ### Company
-    - 🟢 Criar um programa associado a uma Company
-    - 🟢 Editar um programa associado a uma Company
-    - 🟢 Deletar um programa associado a uma Company 
+    - 🟢 Criar um programa associado a uma Company `/programs/:companyId/create`
+    - 🟢 Editar um programa associado a uma Company `PATCH /programs/:programId`
+    - 🟢 Deletar um programa associado a uma Company  `DELETE /programs/:programId`
         - Somente com ``status != 'ONGOING'``
-    - 🟢 Iniciar Programa (mudar `status`)
-    - 🟢 Finalizar Programa (mudar `status`)
+    - 🟢 Iniciar Programa `/programs/:programId/start`
+    - 🟢 Finalizar Programa `/programs/:programId/start`
+    - 🟢 Listar todos os programas criados por uma Company `/programs/:companyId`
 - ### Volunteer
-    - 🟢 Listar voluntários associados a um Programa
-    - 🟢 Aplicar para um Programa
-    - 🟢 Retornar a Aplicação de um voluntário específico o qual aplicou para aquele Programa
-    - 🟢 Listar todos os programas aplicados por um voluntário
-    - 🟢 Desistir do programa (excluir aplicação)
-    - 🟢 Aceitar Aplicação
-    - 🟢 Recusar Aplicação
+    - 🟢 Listar voluntários associados a um Programa `/programs/:programId/applications`
+    - 🟢 Aplicar para um Programa `programs/:programId/:volunteerId/apply`
+    - 🟢 Retornar a Aplicação de um voluntário específico o qual aplicou para aquele Programa ``
+    - 🟢 Listar todos os programas aplicados por um voluntário `/programs/applied/:volunteerId`
+    - 🟢 Desistir do programa (excluir aplicação) `/programs/application/:applicationId/giveup`
+    - 🟢 Aceitar Aplicação `/application/:applicationId/approves`
+    - 🟢 Recusar Aplicação `/application/:applicationId/reject`
         - Não listar na lista de voluntários
 
 - ### Certificado

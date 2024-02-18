@@ -10,7 +10,7 @@ import { ICompanyService } from 'src/domain/ports/icompany_service';
 
 export const CompanySchema = new mongoose.Schema({
   name: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   address: { type: Object, required: true },
   createdAt: { type: Date, required: false },
@@ -64,5 +64,9 @@ export class CompanyService implements ICompanyService {
   async fetchAll(): Promise<Company[]> {
     const companies = await this.companyModel.find().exec();
     return companies;
+  }
+
+  async findOne(field: string, value: string) {
+    return await this.companyModel.findOne({ [field]: value }).exec();
   }
 }

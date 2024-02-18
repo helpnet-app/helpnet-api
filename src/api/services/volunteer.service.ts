@@ -65,4 +65,8 @@ export class VolunteerService implements IVolunteerService {
       .find({ _id: { $in: volunteersId } })
       .exec();
   }
+
+  async findOne(field: string, value: string) {
+    return await this.volunteerModel.findOne({ [field]: value }).exec();
+  }
 }

@@ -8,4 +8,5 @@ export interface IUserService {
   deleteById(id: string): Promise<User>;
   findById(id: string): Promise<User>;
   fetchAll(): Promise<User[]>;
+  findOne(field: string, value: string): Promise<User>;
 }

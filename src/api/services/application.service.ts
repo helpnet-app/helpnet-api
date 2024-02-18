@@ -119,4 +119,10 @@ export class ApplicationService implements IApplicationService {
   async delete(applicationId: string): Promise<Application> {
     return await this.applicationModel.findByIdAndUpdate(applicationId);
   }
+
+  async findApplicationByVolunteerId(volunteerId: string) {
+    return await this.applicationModel
+      .findOne({ volunteer: volunteerId })
+      .exec();
+  }
 }
