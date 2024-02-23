@@ -1,4 +1,4 @@
-import { ModeEnum } from 'src/domain/entities/enum/mode_Enum';
+import { ModeEnum } from 'src/domain/entities/enum/mode_enum';
 
 export interface ProgramToCreateDto {
   title: string;

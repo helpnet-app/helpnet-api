@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { ProgramToCreateDto } from 'src/domain/dtos/program/ProgramToCreateDto';
 import { ProgramToUpdateDto } from 'src/domain/dtos/program/ProgramToUpdateDto';
 import { Program } from 'src/domain/entities/Program';
-import { ModeEnum } from 'src/domain/entities/enum/mode_Enum';
+import { ModeEnum } from 'src/domain/entities/enum/mode_enum';
 import { ProgramStatusEnum } from 'src/domain/entities/enum/program_status_enum';
 import { ItemNotFoundError } from 'src/domain/exceptions/item_not_found';
 import { IProgramService } from 'src/domain/ports/iprogram_service';
