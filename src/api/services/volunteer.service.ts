@@ -13,6 +13,8 @@ export const VolunteerSchema = new mongoose.Schema({
   address: { type: Object, required: true },
   createdAt: { type: Date, required: true, default: Date.now },
   birthDate: { type: Date, required: true },
+  CPF: { type: String, required: true, unique: true },
+  RG: { type: String, required: true, unique: true },
 });
 
 @Injectable()

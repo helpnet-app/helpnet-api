@@ -15,6 +15,7 @@ export const CompanySchema = new mongoose.Schema({
   address: { type: Object, required: true },
   createdAt: { type: Date, required: false },
   tradeName: { type: String, required: true },
+  CNPJ: { type: String, required: true, unique: true },
 });
 
 @Injectable()
