@@ -15,13 +15,13 @@ import { Volunteer } from 'src/domain/entities/Volunteer';
 export class VolunteerController {
   constructor(private volunteerService: VolunteerService) {}
 
-  @Post()
+  @Post() // OK
   async create(@Body() newVolunteer: VolunteerToCreateDto): Promise<Volunteer> {
     const createdVolunteer = await this.volunteerService.create(newVolunteer);
     return createdVolunteer;
   }
 
-  @Put(':id')
+  @Put(':id') // OK
   async update(
     @Param('id') id: string,
     @Body() volunteerToUpdate: Volunteer,
@@ -33,19 +33,19 @@ export class VolunteerController {
     return updatedVolunteer;
   }
 
-  @Delete(':id')
+  @Delete(':id') //OK
   async deleteById(@Param('id') id: string): Promise<Volunteer> {
     const deletedVolunteer = await this.volunteerService.deleteById(id);
     return deletedVolunteer;
   }
 
-  @Get(':id')
+  @Get(':id') // OK
   async findById(@Param('id') id: string): Promise<Volunteer> {
     const foundVolunteer = await this.volunteerService.findById(id);
     return foundVolunteer;
   }
 
-  @Get()
+  @Get() // OK
   async fetchAll(): Promise<Volunteer[]> {
     const volunteers = await this.volunteerService.fetchAll();
     return volunteers;

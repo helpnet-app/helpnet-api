@@ -16,13 +16,13 @@ import { Company } from 'src/domain/entities/Company';
 export class CompanyController {
   constructor(private companyService: CompanyService) {}
 
-  @Post()
+  @Post() // OK
   async create(@Body() newCompany: CompanyToCreateDto): Promise<Company> {
     const createdCompany = await this.companyService.create(newCompany);
     return createdCompany;
   }
 
-  @Put(':id')
+  @Put(':id') //OK
   async update(
     @Param('id') id: string,
     @Body() companyToUpdate: CompanyToUpdateDto,
@@ -34,19 +34,19 @@ export class CompanyController {
     return updatedCompany;
   }
 
-  @Delete(':id')
+  @Delete(':id') //OK
   async deleteById(@Param('id') id: string): Promise<Company> {
     const deletedCompany = await this.companyService.deleteById(id);
     return deletedCompany;
   }
 
-  @Get(':id')
+  @Get(':id') //OK
   async findById(@Param('id') id: string): Promise<Company> {
     const foundCompany = await this.companyService.findById(id);
     return foundCompany;
   }
 
-  @Get()
+  @Get() // OK
   async fetchAll(): Promise<Company[]> {
     const companies = await this.companyService.fetchAll();
     return companies;

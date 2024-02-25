@@ -5,8 +5,8 @@ import { AuthService } from 'src/api/services/auth.service';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @HttpCode(HttpStatus.OK)
-  @Post('login')
+  @HttpCode(HttpStatus.OK) 
+  @Post('login') // OK
   signIn(@Body() signInDto: Record<string, any>) {
     return this.authService.login(signInDto.email, signInDto.password);
   }
