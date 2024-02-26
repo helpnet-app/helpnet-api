@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { OrganizationToCreateDto } from 'src/domain/dtos/organization/organizationToCreateDto';
+import { OrganizationToCreateDto } from 'src/domain/dtos/organization/OrganizationToCreateDto';
 import { Organization } from 'src/domain/entities/Organization';
 import { ItemNotCreatedError } from 'src/domain/exceptions/item_not_created_error';
 import { IOrganizationService } from 'src/domain/ports/iorganization_service';
