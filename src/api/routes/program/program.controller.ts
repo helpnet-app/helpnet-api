@@ -22,7 +22,7 @@ import { Reject } from 'src/domain/use_cases/application/Reject';
 import { Create } from 'src/domain/use_cases/program/Create';
 import { DeleteById } from 'src/domain/use_cases/program/Delete';
 import { FetchAll } from 'src/domain/use_cases/program/FetchAll';
-import { FindAllByCompany } from 'src/domain/use_cases/program/FindAllByCompanyId';
+import { FindAllByOrganization } from 'src/domain/use_cases/program/FindAllByCompanyId';
 import { FindById } from 'src/domain/use_cases/program/FindById';
 import { Finish } from 'src/domain/use_cases/program/Finish';
 import { Start } from 'src/domain/use_cases/program/Start';
@@ -35,13 +35,13 @@ export class ProgramController {
     private readonly applicationService: ApplicationService,
   ) {}
 
-  @Post(':companyId/create')
+  @Post(':organizationId/create')
   async create(
-    @Param('companyId') companyId: string,
+    @Param('organizationId') organizationId: string,
     @Body() programToCreate: ProgramToCreateDto,
   ) {
     const createUC = new Create(this.programService);
-    return await createUC.execute(companyId, programToCreate);
+    return await createUC.execute(organizationId, programToCreate);
   }
 
   @Get()
@@ -50,10 +50,10 @@ export class ProgramController {
     return await foundPrograms.execute();
   }
 
-  @Get('/company/:companyId')
-  async findByCompany(@Param('companyId') companyId: string) {
-    const findByCompanyUC = new FindAllByCompany(this.programService);
-    return await findByCompanyUC.execute(companyId);
+  @Get('/organization/:organizationId')
+  async findByorganization(@Param('organizationId') organizationId: string) {
+    const findByorganizationUC = new FindAllByOrganization(this.programService);
+    return await findByorganizationUC.execute(organizationId);
   }
 
   @Get('/:id')

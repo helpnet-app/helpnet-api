@@ -1,20 +1,16 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import {
-  ApplicationSchema,
-  ApplicationService,
-} from 'src/api/services/application.service';
-import {
-  ProgramSchema,
-  ProgramService,
-} from 'src/api/services/program.service';
-import { CompanyModule } from '../company/company.module';
+import { ApplicationSchema } from 'src/api/schemas/application.schema';
+import { ProgramSchema } from 'src/api/schemas/program.schema';
+import { ApplicationService } from 'src/api/services/application.service';
+import { ProgramService } from 'src/api/services/program.service';
+import { OrganizationModule } from '../organization/organization.module';
 import { VolunteerModule } from '../volunteer/volunteer.module';
 import { ProgramController } from './program.controller';
 
 @Module({
   imports: [
-    CompanyModule,
+    OrganizationModule,
     VolunteerModule,
     MongooseModule.forFeature([{ name: 'Program', schema: ProgramSchema }]),
     MongooseModule.forFeature([

@@ -5,8 +5,11 @@ import { IProgramService } from 'src/domain/ports/iprogram_service';
 export class Create {
   constructor(private readonly service: IProgramService) {}
 
-  async execute(companyId: string, newProgram: ProgramToCreateDto) {
-    const createdProgram = await this.service.create(companyId, newProgram);
+  async execute(organizationId: string, newProgram: ProgramToCreateDto) {
+    const createdProgram = await this.service.create(
+      organizationId,
+      newProgram,
+    );
     if (!createdProgram) {
       throw new ItemNotCreatedError('Não foi possível criar novo programa.');
     }

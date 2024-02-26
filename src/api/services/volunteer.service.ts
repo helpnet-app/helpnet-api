@@ -1,21 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import * as mongoose from 'mongoose';
 import { Model } from 'mongoose';
 import { VolunteerToCreateDto } from 'src/domain/dtos/volunteer/VolunteerToCreateDto';
 import { Volunteer } from 'src/domain/entities/Volunteer';
 import { IVolunteerService } from 'src/domain/ports/ivolunteer_service';
-
-export const VolunteerSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  password: { type: String, required: true },
-  address: { type: Object, required: true },
-  createdAt: { type: Date, required: true, default: Date.now },
-  birthDate: { type: Date, required: true },
-  CPF: { type: String, required: true, unique: true },
-  RG: { type: String, required: true, unique: true },
-});
 
 @Injectable()
 export class VolunteerService implements IVolunteerService {

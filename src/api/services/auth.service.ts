@@ -1,12 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CompanyService } from './company.service';
+import { OrganizationService } from './organization.service';
 import { VolunteerService } from './volunteer.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly companyService: CompanyService,
+    private readonly organizationService: OrganizationService,
     private readonly volunteerService: VolunteerService,
     private jwtService: JwtService,
   ) {}
@@ -15,7 +15,7 @@ export class AuthService {
     password: string,
   ): Promise<{ access_token: string }> {
     const user = await Promise.any([
-      this.companyService.findOne('email', email),
+      this.organizationService.findOne('email', email),
       this.volunteerService.findOne('email', email),
     ]);
 
