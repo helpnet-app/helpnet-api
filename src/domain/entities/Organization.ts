@@ -1,5 +1,5 @@
 import { User } from './User';
 
-export interface Company extends User {
+export interface Organization extends User {
   tradeName: string;
 }

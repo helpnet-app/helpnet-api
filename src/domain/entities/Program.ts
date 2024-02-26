@@ -1,4 +1,3 @@
-import { Company } from './Company';
 import { ModeEnum } from './enum/mode_enum';
 import { ProgramStatusEnum } from './enum/program_status_enum';
 
@@ -9,7 +8,7 @@ export interface ProgramFile {
 
 export interface Program {
   id: string;
-  company: Company;
+  organizationId: string;
   title: string;
   mode: ModeEnum;
   duration: number;
