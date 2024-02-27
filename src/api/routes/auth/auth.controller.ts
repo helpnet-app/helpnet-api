@@ -6,7 +6,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK) 
-  @Post() // OK
+  @Post() // 
   async signIn(@Body() signInDto: Record<string, any>) {
     return await this.authService.login(signInDto.username, signInDto.password);
   }

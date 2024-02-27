@@ -1,8 +1,13 @@
 import * as fs from 'fs';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { Program } from 'src/domain/entities/Program';
+import { Volunteer } from 'src/domain/entities/Volunteer';
+import { ModeEnum } from 'src/domain/entities/enum/mode_enum';
+import { IPDFManagerService } from 'src/domain/ports/ipdf_manager_service';
 
-export class PDFManagerService {
-  async generateCertificate() {
+export class PDFManagerService implements IPDFManagerService {
+  constructor() {}
+  async buildPDF(program: Program, user: Volunteer, verificationCode: string) {
     const doc = await PDFDocument.create();
     const timesRomanFont = await doc.embedFont(StandardFonts.TimesRoman);
     const boldFont = await doc.embedFont(StandardFonts.TimesRomanBoldItalic);
@@ -24,26 +29,24 @@ export class PDFManagerService {
       color: rgb(0, 0.552, 0.058),
     });
 
-    const user = 'Fulano da Silva Lima';
-    const program = 'Programa de Voluntariado de Nome Longo';
-    const org = 'Organização X';
-
     const textLines = [
-      'A Help Net, plataforma de voluntariado, juntamente com ',
-      org,
-      ' confere ao voluntário',
-      user,
+      'A Help Net, plataforma de gerenciamento de programas de voluntariado, confere ao voluntário',
+      user.name,
       'o presente certificado, referente a sua participação no programa de voluntariado',
-      program,
+      program.title,
+      'com duração total de ' +
+        program.duration +
+        ' dias, na modalidade ' +
+        ModeEnum[program.mode],
     ];
     let textY = -120;
-    const fontSize = 16;
+    const fontSize = 14;
 
     for (let i = 0; i < textLines.length; i++) {
       const line = textLines[i];
       let font = timesRomanFont;
       let space = 2;
-      if (i == 1 || i == 3 || i == 5) {
+      if (i == 1 || i == 3) {
         font = boldFont;
         space = 3.5;
       }
@@ -71,8 +74,33 @@ export class PDFManagerService {
       height: logoHeight,
     });
 
+    const verificationText = 'Código de verificação: ' + verificationCode;
+    const verificationWidth = timesRomanFont.widthOfTextAtSize(
+      verificationText,
+      14,
+    );
+
+    page.drawText(verificationText, {
+      x: (width - verificationWidth) / 2,
+      y: textY + 30,
+      font: timesRomanFont,
+      color: rgb(0, 0, 0),
+      size: 14,
+    });
+
+    const dateText = `Certificado gerado em ${new Date().toLocaleString()} `;
+    const dateTextWidth = timesRomanFont.widthOfTextAtSize(dateText, 10);
+    const dateTextHeight = timesRomanFont.heightAtSize(10);
+    page.drawText(dateText, {
+      x: width - dateTextWidth - 4,
+      y: dateTextHeight,
+      font: timesRomanFont,
+      size: 10,
+      color: rgb(0, 0, 0),
+    });
+
     const pdfBytes = await doc.save();
-    fs.writeFileSync('upload/certificado.pdf', pdfBytes);
+    // fs.writeFileSync('upload/certificado.pdf', pdfBytes);
     return pdfBytes;
   }
 }

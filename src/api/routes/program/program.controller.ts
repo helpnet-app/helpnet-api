@@ -8,6 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApplicationService } from 'src/api/services/application.service';
+import { CertificateService } from 'src/api/services/certificate.service.';
 import { ProgramService } from 'src/api/services/program.service';
 import { ProgramToCreateDto } from 'src/domain/dtos/program/ProgramToCreateDto';
 import { ProgramToUpdateDto } from 'src/domain/dtos/program/ProgramToUpdateDto';
@@ -33,10 +34,10 @@ export class ProgramController {
   constructor(
     private readonly programService: ProgramService,
     private readonly applicationService: ApplicationService,
+    private readonly certificateService: CertificateService,
   ) {}
 
   @Post(':organizationId/create')
-  @Post(':organizationId/create') //OK
   async create(
     @Param('organizationId') organizationId: string,
     @Body() programToCreate: ProgramToCreateDto,
@@ -87,7 +88,11 @@ export class ProgramController {
 
   @Post(':id/finish') // OK
   async finishProgram(@Param('id') id: string) {
-    const finishUC = new Finish(this.programService, this.applicationService);
+    const finishUC = new Finish(
+      this.programService,
+      this.applicationService,
+      this.certificateService,
+    );
     return await finishUC.execute(id);
   }
 
@@ -98,11 +103,11 @@ export class ProgramController {
     @Body() questions: Questions,
   ) {
     const ApplyUC = new Apply(this.applicationService);
-    return await ApplyUC.execute(volunteerId, programId, questions)
+    return await ApplyUC.execute(volunteerId, programId, questions);
   }
 
   @Get(':programId/applications') // OK
-  async fetchAllApplicationsByProgram(@Param('programId') programId: string){
+  async fetchAllApplicationsByProgram(@Param('programId') programId: string) {
     const fetchUC = new FetchAllApplicationsByProgram(this.applicationService);
     return await fetchUC.execute(programId);
   }
