@@ -1,9 +1,10 @@
+import { Organization } from './Organization';
 import { ModeEnum } from './enum/mode_enum';
 import { ProgramStatusEnum } from './enum/program_status_enum';
 
-export interface ProgramFile {
-  filename: string;
-  originalName: string;
+export interface ProgramOrganizationResponse {
+  programs: Program[];
+  organization: Organization;
 }
 
 export interface Program {
@@ -11,12 +12,11 @@ export interface Program {
   organizationId: string;
   title: string;
   mode: ModeEnum;
+  status: ProgramStatusEnum;
   duration: number;
   description: string;
   type: string;
   nSpots: number;
   tags: string[];
-  status: ProgramStatusEnum;
-  file?: ProgramFile;
   createdAt: Date;
 }

@@ -41,10 +41,13 @@ export class ApplicationService implements IApplicationService {
     private readonly volunteerService: VolunteerService,
   ) {}
   async fetchApplicationInfo(programId: string, volunteerId: string) {
-    return await this.applicationModel.findOne({
-      volunteer: volunteerId,
-      program: programId,
-    });
+    return await this.applicationModel
+      .findOne({
+        volunteer: volunteerId,
+        program: programId,
+      })
+      .populate('volunteer')
+      .populate('program');
   }
 
   async findApplication(programId: string) {
