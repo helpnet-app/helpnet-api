@@ -16,7 +16,7 @@ import { env } from 'process';
 
 
 export const ProgramSchema = new mongoose.Schema({
-  company: {
+  organization: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Company',
     required: true,
