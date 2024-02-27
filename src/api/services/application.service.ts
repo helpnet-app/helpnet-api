@@ -102,7 +102,12 @@ export class ApplicationService implements IApplicationService {
   }
 
   async findAllAppliedPrograms(volunteerId: string) {
-    return await this.applicationModel.find({ volunteer: volunteerId }).exec();
+    const applications = await this.applicationModel
+      .find({ volunteer: volunteerId })
+      .populate('volunteer')
+      .exec();
+
+    return applications;
   }
 
   async update(
