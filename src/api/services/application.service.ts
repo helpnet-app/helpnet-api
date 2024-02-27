@@ -104,7 +104,7 @@ export class ApplicationService implements IApplicationService {
   async findAllAppliedPrograms(volunteerId: string) {
     const applications = await this.applicationModel
       .find({ volunteer: volunteerId })
-      .populate('volunteer')
+      .populate('program')
       .exec();
 
     return applications;
@@ -138,6 +138,7 @@ export class ApplicationService implements IApplicationService {
   async findApplicationByVolunteerId(volunteerId: string) {
     return await this.applicationModel
       .findOne({ volunteer: volunteerId })
+      .populate('volunteer')
       .exec();
   }
 }

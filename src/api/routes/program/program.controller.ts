@@ -106,18 +106,21 @@ export class ProgramController {
     return await ApplyUC.execute(volunteerId, programId, questions);
   }
 
+  // OBS RETORNA TODAS AS APLICAÇÕES DAQUELE PROGRAMA
   @Get(':programId/applications') // OK
   async fetchAllApplicationsByProgram(@Param('programId') programId: string) {
     const fetchUC = new FetchAllApplicationsByProgram(this.applicationService);
     return await fetchUC.execute(programId);
   }
 
+  // OBS  RETORNA TODAS AS APLICAÇÕES DO VOLUNTÁRIO COM INFORMAÇÕES DO PROGRAMA
   @Get('/applied/:volunteerId') // OK
   async findAppliedPrograms(@Param('volunteerId') volunteerId: string) {
     const appliedUC = new FindAllAppliedPrograms(this.applicationService);
     return await appliedUC.execute(volunteerId);
   }
 
+  // OBS RETORNA APLICAÇÃO >>ESPECÍFICA<<  DO VOLUNTÁRIO COM INFORMAÇÕES DO VOLUNTÁRIO
   @Get('/application/:volunteerId') // ?
   async findApplicationVolunteer(@Param('volunteerId') volunteerId: string) {
     const findUC = new FindApplicationByVolunteerId(this.applicationService);
