@@ -6,7 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApplicationService } from 'src/api/services/application.service';
 import { ProgramService } from 'src/api/services/program.service';
 import { ProgramToCreateDto } from 'src/domain/dtos/program/ProgramToCreateDto';
@@ -30,18 +33,17 @@ import { Update } from 'src/domain/use_cases/program/Update';
 
 @Controller('programs')
 export class ProgramController {
-  constructor(
-    private readonly programService: ProgramService,
+  constructor(private readonly programService: ProgramService,
     private readonly applicationService: ApplicationService,
-  ) {}
+    ) {}
 
   @Post(':companyId/create')
   async create(
     @Param('companyId') companyId: string,
     @Body() programToCreate: ProgramToCreateDto,
   ) {
-    const createUC = new Create(this.programService);
-    return await createUC.execute(companyId, programToCreate);
+    const createdProgram = await this.programService.create(companyId, programToCreate);
+    return createdProgram;
   }
 
   @Get()

@@ -18,6 +18,6 @@ export interface Program {
   nSpots: number;
   tags: string[];
   status: ProgramStatusEnum;
-  file?: ProgramFile;
+  imageUrl?: string;
   createdAt: Date;
 }

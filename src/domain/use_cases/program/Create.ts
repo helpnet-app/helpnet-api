@@ -5,8 +5,9 @@ import { IProgramService } from 'src/domain/ports/iprogram_service';
 export class Create {
   constructor(private readonly service: IProgramService) {}
 
-  async execute(companyId: string, newProgram: ProgramToCreateDto) {
-    const createdProgram = await this.service.create(companyId, newProgram);
+  async execute(companyId: string, newProgram: ProgramToCreateDto, image: string) {
+    // Assuming you're passing the base64 string of the image as a parameter named 'image'
+    const createdProgram = await this.service.create(companyId, newProgram, image);
     if (!createdProgram) {
       throw new ItemNotCreatedError('Não foi possível criar novo programa.');
     }

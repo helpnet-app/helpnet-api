@@ -1,6 +1,6 @@
 import { ModeEnum } from 'src/domain/entities/enum/mode_enum';
 
-export interface ProgramToCreateDto {
+export class ProgramToCreateDto {
   title: string;
   mode: ModeEnum;
   duration: number;
@@ -8,4 +8,5 @@ export interface ProgramToCreateDto {
   type: string;
   nSpots: number;
   tags: string[];
+  image: string; // Use UploadedFile type from @nestjs/common
 }

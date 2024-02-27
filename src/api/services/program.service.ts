@@ -1,15 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import * as mongoose from 'mongoose';
 import { Model } from 'mongoose';
 import { ProgramToCreateDto } from 'src/domain/dtos/program/ProgramToCreateDto';
-import { ProgramToUpdateDto } from 'src/domain/dtos/program/ProgramToUpdateDto';
 import { Program } from 'src/domain/entities/Program';
 import { ModeEnum } from 'src/domain/entities/enum/mode_enum';
 import { ProgramStatusEnum } from 'src/domain/entities/enum/program_status_enum';
 import { ItemNotFoundError } from 'src/domain/exceptions/item_not_found';
 import { IProgramService } from 'src/domain/ports/iprogram_service';
 import { CompanyService } from './company.service';
+import * as cloudinary from 'cloudinary';
+import { v2 as cloudinaryV2 } from 'cloudinary';
+import { ProgramToUpdateDto } from 'src/domain/dtos/program/ProgramToUpdateDto';
+import mongoose from 'mongoose';
+import { env } from 'process';
+
 
 export const ProgramSchema = new mongoose.Schema({
   company: {
@@ -26,6 +30,7 @@ export const ProgramSchema = new mongoose.Schema({
   tags: { type: [{ type: String }], required: true },
   status: { type: Number, enum: ProgramStatusEnum, required: true },
   createdAt: { type: Date, required: true },
+  image: { type: String, required: true } // Assuming the image is stored as a base64 string
 });
 
 @Injectable()
@@ -34,18 +39,33 @@ export class ProgramService implements IProgramService {
     @InjectModel('Program') private readonly programModel: Model<Program>,
     private readonly companyService: CompanyService,
   ) {}
+
   async create(
     companyId: string,
     newProgram: ProgramToCreateDto,
   ): Promise<Program> {
+    const cloud_name =  env.CLOUDINARY_CLOUD_NAME
+    const api_key = env.CLOUDINARY_API_KEY
+    const api_secret = env.CLOUDINARY_API_SECRET
+
+    cloudinaryV2.config({
+      cloud_name: cloud_name,
+      api_key: api_key,
+      api_secret: api_secret,
+    });
+
     const company = await this.companyService.findById(companyId);
     if (!company) {
       throw new ItemNotFoundError(
         `Organização com ID '${companyId}' não encontrada.`,
       );
     }
+
+    const uploadedImage = await this.uploadImage(newProgram.image); // Upload image to cloudinary
+
     const program = new this.programModel({
       ...newProgram,
+      image: uploadedImage.secure_url, // Store the URL of the uploaded image
       status: ProgramStatusEnum.CREATED,
       createdAt: new Date(),
       company: company._id,
@@ -53,6 +73,19 @@ export class ProgramService implements IProgramService {
 
     return await program.save();
   }
+
+  async uploadImage(image: string): Promise<cloudinary.UploadApiResponse> {
+    return new Promise((resolve, reject) => {
+      cloudinaryV2.uploader.upload(image, (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
 
   async update(
     id: string,
