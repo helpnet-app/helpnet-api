@@ -4,7 +4,7 @@
 
 ## Usuário
 
-- 🔴 Login: `
+- 🟢 Login: `
 /user/login
 `
 - 🔴 Logout: `/user/logout`
@@ -14,38 +14,36 @@
 - 🟢 Atualizar Volunteer
 - 🟢 Deletar Volunteer
 
-## Company
+## Organization
 
-- 🟢 Cadastro de Company
-- 🟢 Atualizar Company
-- 🟢 Deletar Company
+- 🟢 Cadastro de Organization
+- 🟢 Atualizar Organization
+- 🟢 Deletar Organization
 
 ## Certificate
 
 - 🔴 Validar Certificado
 - 🔴 Gerar Certificado
+- 🔴 Emitir certificado do Programa
 
 ## Program
 
 - 🟢 Listar todos os Programas de voluntariado disponíveis `/programs`
-- ### Company
-    - 🟢 Criar um programa associado a uma Company `/programs/:companyId/create`
-    - 🟢 Editar um programa associado a uma Company `PATCH /programs/:programId`
-    - 🟢 Deletar um programa associado a uma Company  `DELETE /programs/:programId`
+- ### Organization
+    - 🟢 Criar um programa associado a uma Organization `/programs/:organizationId/create`
+    - 🟢 Editar um programa associado a uma Organization `PATCH /programs/:programId`
+    - 🟢 Deletar um programa associado a uma Organization  `DELETE /programs/:programId`
         - Somente com ``status != 'ONGOING'``
     - 🟢 Iniciar Programa `/programs/:programId/start`
+        - Um programa só pode iniciar se tiver no mínimo 1 pessoa aprovada
     - 🟢 Finalizar Programa `/programs/:programId/start`
-    - 🟢 Listar todos os programas criados por uma Company `/programs/:companyId`
+    - 🟢 Listar todos os programas criados por uma Organization `/programs/:organizationId`
 - ### Volunteer
     - 🟢 Listar voluntários associados a um Programa `/programs/:programId/applications`
     - 🟢 Aplicar para um Programa `programs/:programId/:volunteerId/apply`
-    - 🟢 Retornar a Aplicação de um voluntário específico o qual aplicou para aquele Programa ``
+    - 🟢 Retornar a Aplicação de um voluntário específico o qual aplicou para aquele Programa `/application/:volunteerId`
     - 🟢 Listar todos os programas aplicados por um voluntário `/programs/applied/:volunteerId`
     - 🟢 Desistir do programa (excluir aplicação) `/programs/application/:applicationId/giveup`
     - 🟢 Aceitar Aplicação `/application/:applicationId/approves`
     - 🟢 Recusar Aplicação `/application/:applicationId/reject`
         - Não listar na lista de voluntários
-
-- ### Certificado
-    - 🔴 Emitir certificado do Programa
-    - 🔴 Gerar certificado do Programa

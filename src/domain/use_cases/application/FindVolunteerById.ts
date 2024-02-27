@@ -5,7 +5,8 @@ export class FindApplicationByVolunteerId {
   constructor(private readonly service: IApplicationService) {}
 
   async execute(volunteerId: string) {
-    const foundApplication = await this.execute(volunteerId);
+    const foundApplication =
+      await this.service.findApplicationByVolunteerId(volunteerId);
     if (!foundApplication)
       throw new ItemNotFoundError(
         'Não foi possível acessar informações do candidato',

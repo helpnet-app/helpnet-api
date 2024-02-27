@@ -25,7 +25,7 @@ import { Reject } from 'src/domain/use_cases/application/Reject';
 import { Create } from 'src/domain/use_cases/program/Create';
 import { DeleteById } from 'src/domain/use_cases/program/Delete';
 import { FetchAll } from 'src/domain/use_cases/program/FetchAll';
-import { FindAllByCompany } from 'src/domain/use_cases/program/FindAllByCompanyId';
+import { FindAllByOrganization } from 'src/domain/use_cases/program/FindAllByOrganizationId';
 import { FindById } from 'src/domain/use_cases/program/FindById';
 import { Finish } from 'src/domain/use_cases/program/Finish';
 import { Start } from 'src/domain/use_cases/program/Start';
@@ -37,12 +37,13 @@ export class ProgramController {
     private readonly applicationService: ApplicationService,
     ) {}
 
-  @Post(':companyId/create')
+  @Post(':organizationId/create')
+  @Post(':organizationId/create') //OK
   async create(
-    @Param('companyId') companyId: string,
+    @Param('organizationId') organizationId: string,
     @Body() programToCreate: ProgramToCreateDto,
   ) {
-    const createdProgram = await this.programService.create(companyId, programToCreate);
+    const createdProgram = await this.programService.create(organizationId, programToCreate);
     return createdProgram;
   }
 
@@ -53,20 +54,20 @@ export class ProgramController {
     return await foundPrograms.execute();
   }
 
-  @Get('/company/:companyId')
-  async findByCompany(@Param('companyId') companyId: string) {
-    const findByCompanyUC = new FindAllByCompany(this.programService);
-    return await findByCompanyUC.execute(companyId);
+  @Get('/organization/:organizationId') // OK
+  async findByOrganization(@Param('organizationId') organizationId: string) {
+    const findByOrganizationUC = new FindAllByOrganization(this.programService);
+    return await findByOrganizationUC.execute(organizationId);
   }
 
-  @Get('/:id')
+  @Get('/:id') // OK
   async findById(@Param('id') id: string) {
     const findUC = new FindById(this.programService);
     const foundProgram = await findUC.execute(id);
     return foundProgram;
   }
 
-  @Patch(':id')
+  @Patch(':id') //OK
   async update(
     @Param('id') id: string,
     @Body() updatedField: ProgramToUpdateDto,
@@ -75,25 +76,25 @@ export class ProgramController {
     return await updateUC.execute(id, updatedField);
   }
 
-  @Delete(':id')
+  @Delete(':id') // OK
   async deleteById(@Param('id') id: string) {
     const deleteUC = new DeleteById(this.programService);
     return await deleteUC.execute(id);
   }
 
-  @Post(':id/start')
+  @Post(':id/start') // Ok
   async startProgram(@Param('id') id: string) {
     const startUC = new Start(this.programService);
     return await startUC.execute(id);
   }
 
-  @Post(':id/finish')
+  @Post(':id/finish') // OK
   async finishProgram(@Param('id') id: string) {
     const finishUC = new Finish(this.programService, this.applicationService);
     return await finishUC.execute(id);
   }
 
-  @Post('/:programId/:volunteerId/apply')
+  @Post('/:programId/:volunteerId/apply') // OK
   async apply(
     @Param('programId') programId: string,
     @Param('volunteerId') volunteerId: string,
@@ -103,37 +104,37 @@ export class ProgramController {
     return await ApplyUC.execute(volunteerId, programId, questions)
   }
 
-  @Get(':programId/applications')
+  @Get(':programId/applications') // OK
   async fetchAllApplicationsByProgram(@Param('programId') programId: string){
     const fetchUC = new FetchAllApplicationsByProgram(this.applicationService);
     return await fetchUC.execute(programId);
   }
 
-  @Get('/applied/:volunteerId')
+  @Get('/applied/:volunteerId') // OK
   async findAppliedPrograms(@Param('volunteerId') volunteerId: string) {
     const appliedUC = new FindAllAppliedPrograms(this.applicationService);
     return await appliedUC.execute(volunteerId);
   }
 
-  @Get('/application/:volunteerId')
+  @Get('/application/:volunteerId') // ?
   async findApplicationVolunteer(@Param('volunteerId') volunteerId: string) {
     const findUC = new FindApplicationByVolunteerId(this.applicationService);
     return await findUC.execute(volunteerId);
   }
 
-  @Delete('/application/:applicationId/giveup')
+  @Delete('/application/:applicationId/giveup') // ?
   async giveUp(@Param('applicationId') applicationId: string) {
     const giveUpUC = new GiveUp(this.applicationService);
     return await giveUpUC.execute(applicationId);
   }
 
-  @Patch('/application/:applicationId/approves')
+  @Patch('/application/:applicationId/approves') // OK
   async approves(@Param('applicationId') applicationId: string) {
     const approvesUC = new Approves(this.applicationService);
     return approvesUC.execute(applicationId);
   }
 
-  @Patch('/application/:applicationId/reject')
+  @Patch('/application/:applicationId/reject') // OK
   async reject(@Param('applicationId') applicationId: string) {
     const rejectUC = new Reject(this.applicationService);
     return rejectUC.execute(applicationId);

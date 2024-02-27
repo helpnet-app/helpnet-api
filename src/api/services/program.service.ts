@@ -3,16 +3,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ProgramToCreateDto } from 'src/domain/dtos/program/ProgramToCreateDto';
 import { Program } from 'src/domain/entities/Program';
-import { ModeEnum } from 'src/domain/entities/enum/mode_enum';
 import { ProgramStatusEnum } from 'src/domain/entities/enum/program_status_enum';
 import { ItemNotFoundError } from 'src/domain/exceptions/item_not_found';
 import { IProgramService } from 'src/domain/ports/iprogram_service';
-import { CompanyService } from './company.service';
 import * as cloudinary from 'cloudinary';
 import { v2 as cloudinaryV2 } from 'cloudinary';
 import { ProgramToUpdateDto } from 'src/domain/dtos/program/ProgramToUpdateDto';
 import mongoose from 'mongoose';
 import { env } from 'process';
+import { OrganizationService } from './organization.service';
+import { ModeEnum } from 'src/domain/entities/enum/mode_enum';
 
 
 export const ProgramSchema = new mongoose.Schema({
@@ -37,11 +37,11 @@ export const ProgramSchema = new mongoose.Schema({
 export class ProgramService implements IProgramService {
   constructor(
     @InjectModel('Program') private readonly programModel: Model<Program>,
-    private readonly companyService: CompanyService,
+    private readonly organizationService: OrganizationService,
   ) {}
 
   async create(
-    companyId: string,
+    organizationId: string,
     newProgram: ProgramToCreateDto,
   ): Promise<Program> {
     const cloud_name =  env.CLOUDINARY_CLOUD_NAME
@@ -54,10 +54,10 @@ export class ProgramService implements IProgramService {
       api_secret: api_secret,
     });
 
-    const company = await this.companyService.findById(companyId);
-    if (!company) {
+    const organization = await this.organizationService.findById(organizationId);
+    if (!organization) {
       throw new ItemNotFoundError(
-        `Organização com ID '${companyId}' não encontrada.`,
+        `Organização com ID '${organizationId}' não encontrada.`,
       );
     }
 
@@ -68,7 +68,7 @@ export class ProgramService implements IProgramService {
       pictureLink: uploadedImage.secure_url, // Store the URL of the uploaded image
       status: ProgramStatusEnum.CREATED,
       createdAt: new Date(),
-      company: company._id,
+      organization: organization._id,
     });
 
     return await program.save();
@@ -114,13 +114,16 @@ export class ProgramService implements IProgramService {
     return foundProgram;
   }
 
-  async findAllByCompanyId(companyId: string): Promise<Program[]> {
-    const company = await this.companyService.findById(companyId);
-    if (!company) {
+  async findAllByOrganizationId(organizationId: string): Promise<Program[]> {
+    const organization =
+      await this.organizationService.findById(organizationId);
+    if (!organization) {
       throw new ItemNotFoundError(
-        `Organização com ID '${companyId}' não encontrada.`,
+        `Organização com ID '${organizationId}' não encontrada.`,
       );
     }
-    return await this.programModel.find({ company: companyId }).exec();
+    return await this.programModel
+      .find({ organization: organizationId })
+      .exec();
   }
 }

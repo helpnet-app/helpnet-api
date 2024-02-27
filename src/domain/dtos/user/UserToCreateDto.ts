@@ -1,9 +1,14 @@
-import { Address } from "src/domain/entities/Address";
-
 export interface UserToCreateDto {
   name: string;
+  username: string;
   email: string;
   password: string;
-  address: Address;
+  whatsapp: string;
+  cep: string;
+  city: string;
+  country: string;
+  district: string;
+  houseNumber: string;
+  state: string;
   phone: string;
 }
