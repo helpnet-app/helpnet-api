@@ -1,5 +1,6 @@
 export interface UserToCreateDto {
   name: string;
+  username: string;
   email: string;
   password: string;
   whatsapp: string;
