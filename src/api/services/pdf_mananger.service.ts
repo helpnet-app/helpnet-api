@@ -100,7 +100,7 @@ export class PDFManagerService implements IPDFManagerService {
     });
 
     const pdfBytes = await doc.save();
-    // fs.writeFileSync('upload/certificado.pdf', pdfBytes);
+    fs.writeFileSync(`upload/${user._id}.pdf`, pdfBytes);
     return pdfBytes;
   }
 }

@@ -55,9 +55,7 @@ export class CertificateService implements ICertificateService {
       volunteer,
       certificate.verificationCode,
     );
-    return {
-      file: newFile,
-    };
+    return newFile;
   }
 
   async verify(verificationCode: string): Promise<boolean> {
