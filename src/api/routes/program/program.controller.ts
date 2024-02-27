@@ -46,6 +46,7 @@ export class ProgramController {
     return createdProgram;
   }
 
+
   @Get()
   async fetchAll() {
     const foundPrograms = new FetchAll(this.programService);

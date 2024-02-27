@@ -8,5 +8,5 @@ export class ProgramToCreateDto {
   type: string;
   nSpots: number;
   tags: string[];
-  image: string; // Use UploadedFile type from @nestjs/common
+  pictureLink: string; // Use UploadedFile type from @nestjs/common
 }

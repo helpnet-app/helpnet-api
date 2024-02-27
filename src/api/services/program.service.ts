@@ -30,7 +30,7 @@ export const ProgramSchema = new mongoose.Schema({
   tags: { type: [{ type: String }], required: true },
   status: { type: Number, enum: ProgramStatusEnum, required: true },
   createdAt: { type: Date, required: true },
-  image: { type: String, required: true } // Assuming the image is stored as a base64 string
+  pictureLink: { type: String, required: true } // Assuming the image is stored as a base64 string
 });
 
 @Injectable()
@@ -61,11 +61,11 @@ export class ProgramService implements IProgramService {
       );
     }
 
-    const uploadedImage = await this.uploadImage(newProgram.image); // Upload image to cloudinary
+    const uploadedImage = await this.uploadImage(newProgram.pictureLink); // Upload image to cloudinary
 
     const program = new this.programModel({
       ...newProgram,
-      image: uploadedImage.secure_url, // Store the URL of the uploaded image
+      pictureLink: uploadedImage.secure_url, // Store the URL of the uploaded image
       status: ProgramStatusEnum.CREATED,
       createdAt: new Date(),
       company: company._id,
