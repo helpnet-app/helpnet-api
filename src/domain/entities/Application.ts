@@ -16,6 +16,7 @@ export interface Application {
   status: ApplicationStatusEnum;
   volunteer: string;
   program: string;
+  organization: string;
   appliedAt: Date;
   finishedAt: Date;
   questions: Questions; 

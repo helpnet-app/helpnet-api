@@ -1,11 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
 import { Model } from 'mongoose';
 import { ApplicationToUpdateDTO } from 'src/domain/dtos/application/ApplicationToUpdateDto';
 import { Application, Questions } from 'src/domain/entities/Application';
 import { ApplicationStatusEnum } from 'src/domain/entities/enum/application_status_enum';
 import { IApplicationService } from 'src/domain/ports/iapplication_service';
 import { VolunteerService } from './volunteer.service';
+
+export const ApplicationSchema = new mongoose.Schema({
+  status: { type: Number, enum: ApplicationStatusEnum, required: true },
+  volunteer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Volunteer',
+    required: true,
+  },
+  program: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Program',
+    required: true,
+  },
+  appliedAt: { type: Date, required: true },
+  finishedAt: { type: Date },
+  createdAt: { type: Date },
+  questions: {
+    schedule: {
+      days: [String],
+      period: [String],
+    },
+    personalDescription: String,
+    experience: String,
+  },
+});
 
 @Injectable()
 export class ApplicationService implements IApplicationService {
@@ -14,6 +40,15 @@ export class ApplicationService implements IApplicationService {
     private readonly applicationModel: Model<Application>,
     private readonly volunteerService: VolunteerService,
   ) {}
+  async fetchApplicationInfo(programId: string, volunteerId: string) {
+    return await this.applicationModel
+      .findOne({
+        volunteer: volunteerId,
+        program: programId,
+      })
+      .populate('volunteer')
+      .populate('program');
+  }
 
   async findApplication(programId: string) {
     return await this.applicationModel.findOne({ program: programId }).exec();
@@ -84,14 +119,15 @@ export class ApplicationService implements IApplicationService {
   }
 
   async updateManyByProgramId(programId: string, field: string, newValue: any) {
-    return await this.applicationModel.updateMany(
+    await this.applicationModel.updateMany(
       { program: programId },
       { $set: { [field]: newValue } },
     );
+    return await this.applicationModel.find({ program: programId });
   }
 
   async delete(applicationId: string): Promise<Application> {
-    return await this.applicationModel.findByIdAndDelete(applicationId);
+    return await this.applicationModel.findByIdAndUpdate(applicationId);
   }
 
   async findApplicationByVolunteerId(volunteerId: string) {

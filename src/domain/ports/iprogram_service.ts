@@ -12,5 +12,5 @@ export interface IProgramService {
   findById(id: string): Promise<Program>;
   deleteById(programId: string): Promise<Program>;
   fetchAll(): Promise<Program[]>;
-  findAllByOrganizationId(organizationId: string): Promise<Program[]>;
+  findAllByOrganizationId(organizationId: string): Promise<Program[]>
 }

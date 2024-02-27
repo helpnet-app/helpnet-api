@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { ApplicationStatusEnum } from "src/domain/entities/enum/application_status_enum";
+import mongoose from 'mongoose';
+import { ApplicationStatusEnum } from 'src/domain/entities/enum/application_status_enum';
 
 export const ApplicationSchema = new mongoose.Schema({
   status: { type: Number, enum: ApplicationStatusEnum, required: true },

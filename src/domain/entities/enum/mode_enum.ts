@@ -1,5 +1,5 @@
 export enum ModeEnum {
-  IN_PERSON = 1,
-  ONLINE = 2,
-  HYBRID = 3,
+  'Presencial' = 1,
+  'Online' = 2,
+  'Híbrido' = 3,
 }

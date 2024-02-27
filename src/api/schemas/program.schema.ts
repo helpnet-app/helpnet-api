@@ -5,7 +5,7 @@ import { ProgramStatusEnum } from 'src/domain/entities/enum/program_status_enum'
 export const ProgramSchema = new mongoose.Schema({
   organization: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'organization',
+    ref: 'Organization',
     required: true,
   },
   title: { type: String, required: true },

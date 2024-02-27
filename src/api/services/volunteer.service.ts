@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { VolunteerToCreateDto } from 'src/domain/dtos/volunteer/VolunteerToCreateDto';
 import { Volunteer } from 'src/domain/entities/Volunteer';
+import { ItemNotFoundError } from 'src/domain/exceptions/item_not_found';
 import { IVolunteerService } from 'src/domain/ports/ivolunteer_service';
 
 @Injectable()
@@ -24,7 +25,7 @@ export class VolunteerService implements IVolunteerService {
       { new: true },
     );
     if (!updatedVolunteer) {
-      throw new NotFoundException('Volunteer not found');
+      throw new ItemNotFoundError('Voluntário não encontrado');
     }
     return updatedVolunteer;
   }
@@ -32,7 +33,7 @@ export class VolunteerService implements IVolunteerService {
   async deleteById(id: string): Promise<Volunteer> {
     const deletedVolunteer = await this.volunteerModel.findByIdAndDelete(id);
     if (!deletedVolunteer) {
-      throw new NotFoundException('Volunteer not found');
+      throw new ItemNotFoundError('Voluntário não encontrado');
     }
     return deletedVolunteer;
   }
@@ -40,7 +41,7 @@ export class VolunteerService implements IVolunteerService {
   async findById(id: string): Promise<Volunteer> {
     const foundVolunteer = await this.volunteerModel.findById(id);
     if (!foundVolunteer) {
-      throw new NotFoundException('Volunteer not found');
+      throw new ItemNotFoundError('Voluntário não encontrado');
     }
     return foundVolunteer;
   }

@@ -55,7 +55,7 @@ export class ProgramService implements IProgramService {
     return await this.programModel.findByIdAndDelete(programId);
   }
   async fetchAll(): Promise<Program[]> {
-    return await this.programModel.find().exec();
+    return await this.programModel.find().populate('organization').exec();
   }
 
   async findById(id: string): Promise<Program> {
